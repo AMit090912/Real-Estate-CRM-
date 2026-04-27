@@ -1,0 +1,53 @@
+{% extends "crm/base.html" %}
+{% block title %}Follow-ups - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div><h1>Follow-ups</h1><p>Log calls, SMS, emails and scheduled reminders.</p></div>
+</div>
+
+<section class="grid two">
+  <div class="panel">
+    <h2>Log Activity</h2>
+    <form method="post" action="{% url 'activity_create' %}" class="mini-form">
+      {% csrf_token %}
+      {{ activity_form.as_p }}
+      <button class="button primary" type="submit">Save Activity</button>
+    </form>
+  </div>
+  <div class="panel">
+    <h2>Schedule Reminder</h2>
+    <form method="post" action="{% url 'reminder_create' %}" class="mini-form">
+      {% csrf_token %}
+      {{ reminder_form.as_p }}
+      <button class="button primary" type="submit">Save Reminder</button>
+    </form>
+  </div>
+</section>
+
+<section class="grid two">
+  <div class="panel">
+    <h2>Activity Timeline</h2>
+    {% for activity in activities %}
+      <div class="line-item">
+        <strong>{{ activity.channel }} · {{ activity.direction }}</strong>
+        <span>{{ activity.note }}</span>
+        <span class="subtle">{{ activity.entity_type }} #{{ activity.entity_id }} · {{ activity.agent|default:"Unassigned" }}</span>
+      </div>
+    {% empty %}
+      <p>No activity yet.</p>
+    {% endfor %}
+  </div>
+  <div class="panel">
+    <h2>Reminders</h2>
+    {% for reminder in reminders %}
+      <div class="line-item">
+        <strong>{{ reminder.title }}</strong>
+        <span>{{ reminder.channel }} · {{ reminder.agent|default:"Unassigned" }} · {{ reminder.due_date }}</span>
+        <form method="post" action="{% url 'reminder_toggle' reminder.id %}">{% csrf_token %}<button class="button small" type="submit">{% if reminder.completed %}Reopen{% else %}Done{% endif %}</button></form>
+      </div>
+    {% empty %}
+      <p>No reminders yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

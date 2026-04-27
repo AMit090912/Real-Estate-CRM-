@@ -1,0 +1,33 @@
+{% extends "crm/base.html" %}
+{% block title %}Agents - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div><h1>Agents</h1><p>Users, roles and simple performance tracking.</p></div>
+  <a class="button primary" href="{% url 'agent_create' %}">Add Agent</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Leads</th><th>Deals</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for agent in agents %}
+      <tr>
+        <td>{{ agent.name }}</td>
+        <td>{{ agent.email }}</td>
+        <td><span class="badge">{{ agent.role }}</span></td>
+        <td>{{ agent.lead_count }}</td>
+        <td>{{ agent.deal_count }}</td>
+        <td>{% if agent.active %}Active{% else %}Inactive{% endif %}</td>
+        <td class="actions">
+          <a class="button small" href="{% url 'agent_update' agent.id %}">Edit</a>
+          <form method="post" action="{% url 'agent_delete' agent.id %}" onsubmit="return confirm('Delete this agent? Existing records will become unassigned.')">
+            {% csrf_token %}
+            <button class="button small danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

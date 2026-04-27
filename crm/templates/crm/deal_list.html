@@ -1,0 +1,36 @@
+{% extends "crm/base.html" %}
+{% block title %}Deals - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div><h1>Deals</h1><p>Kanban style pipeline with commission tracking.</p></div>
+  <a class="button primary" href="{% url 'deal_create' %}">Add Deal</a>
+</div>
+
+<section class="kanban">
+  {% for lane in lanes %}
+    <div class="lane">
+      <h2>{{ lane.stage }}</h2>
+      {% for deal in lane.deals %}
+        <article class="deal-card">
+          <strong>{{ deal.title }}</strong>
+          <span>Value: Rs {{ deal.value }}</span>
+          <span>Commission: Rs {{ deal.commission }} ({{ deal.commission_rate }}%)</span>
+          <span class="subtle">{{ deal.client|default:"No client" }} · {{ deal.property|default:"No property" }}</span>
+          <span class="subtle">Agent: {{ deal.agent|default:"Unassigned" }}</span>
+          <div class="actions stack">
+            <a class="button small" href="{% url 'deal_update' deal.id %}">Edit</a>
+            {% for stage in stages %}
+              {% if stage != deal.stage %}
+                <form method="post" action="{% url 'deal_stage' deal.id stage %}">{% csrf_token %}<button class="button small" type="submit">{{ stage }}</button></form>
+              {% endif %}
+            {% endfor %}
+            <form method="post" action="{% url 'deal_delete' deal.id %}" onsubmit="return confirm('Delete this deal?')">{% csrf_token %}<button class="button small danger" type="submit">Delete</button></form>
+          </div>
+        </article>
+      {% empty %}
+        <p class="subtle">No deals here.</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

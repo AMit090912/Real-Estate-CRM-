@@ -1,0 +1,33 @@
+{% extends "crm/base.html" %}
+{% block title %}Clients - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div><h1>Clients</h1><p>Buyer and seller profiles with history.</p></div>
+  <a class="button primary" href="{% url 'client_create' %}">Add Client</a>
+</div>
+
+<section class="cards two">
+  {% for client in clients %}
+    <article class="panel">
+      <h2>{{ client.name }}</h2>
+      <p><span class="badge">{{ client.client_type }}</span> {{ client.phone }} {{ client.email }}</p>
+      <p>{{ client.preferences }}</p>
+      <p class="subtle">Lead: {{ client.linked_lead|default:"Not linked" }}</p>
+      <p><strong>Visited:</strong>
+        {% for property in client.visited_properties.all %}
+          {{ property.title }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          None
+        {% endfor %}
+      </p>
+      <p><strong>Inquiries:</strong> {{ client.inquiries|default:"No notes" }}</p>
+      <div class="actions">
+        <a class="button small" href="{% url 'client_update' client.id %}">Edit</a>
+        <form method="post" action="{% url 'client_delete' client.id %}" onsubmit="return confirm('Delete this client?')">{% csrf_token %}<button class="button small danger" type="submit">Delete</button></form>
+      </div>
+    </article>
+  {% empty %}
+    <p>No clients yet.</p>
+  {% endfor %}
+</section>
+{% endblock %}

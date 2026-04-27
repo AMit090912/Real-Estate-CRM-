@@ -1,0 +1,36 @@
+{% extends "crm/base.html" %}
+{% block title %}Reports - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div><h1>Reports</h1><p>Lead conversion, revenue and agent performance.</p></div>
+  <div class="actions">
+    <a class="button" href="{% url 'export_csv' %}">Export CSV</a>
+    <a class="button" href="{% url 'export_pdf' %}">Export PDF</a>
+  </div>
+</div>
+
+<section class="cards four">
+  <div class="card"><span>Conversion</span><strong>{{ stats.conversion_rate }}%</strong></div>
+  <div class="card"><span>Pipeline</span><strong>Rs {{ stats.pipeline }}</strong></div>
+  <div class="card"><span>Revenue</span><strong>Rs {{ stats.revenue }}</strong></div>
+  <div class="card"><span>Commission</span><strong>Rs {{ stats.commission }}</strong></div>
+</section>
+
+<section class="grid two">
+  <div class="panel">
+    <h2>Leads By Status</h2>
+    {% for row in lead_status %}
+      <div class="bar-row"><span>{{ row.status }}</span><div><i style="width: {{ row.count|add:1 }}0%"></i></div><strong>{{ row.count }}</strong></div>
+    {% endfor %}
+  </div>
+  <div class="panel">
+    <h2>Agent Performance</h2>
+    {% for row in agent_rows %}
+      <div class="line-item">
+        <strong>{{ row.agent.name }}</strong>
+        <span>{{ row.leads }} leads · {{ row.deals }} deals · Rs {{ row.pipeline }} pipeline · {{ row.tasks }} tasks</span>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

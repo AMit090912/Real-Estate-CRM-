@@ -1,0 +1,57 @@
+{% extends "crm/base.html" %}
+{% block title %}Dashboard - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Quick view of leads, deals, revenue and follow-ups.</p>
+  </div>
+  <a class="button primary" href="{% url 'lead_create' %}">Add Lead</a>
+</div>
+
+<section class="cards four">
+  <div class="card"><span>Total Leads</span><strong>{{ stats.total_leads }}</strong><small>{{ stats.conversion_rate }}% conversion</small></div>
+  <div class="card"><span>Properties</span><strong>{{ stats.total_properties }}</strong><small>Residential and commercial</small></div>
+  <div class="card"><span>Active Deals</span><strong>{{ stats.active_deals }}</strong><small>Pipeline: Rs {{ stats.pipeline }}</small></div>
+  <div class="card"><span>Pending Follow-ups</span><strong>{{ stats.pending_followups }}</strong><small>Due tasks and reminders</small></div>
+</section>
+
+<section class="grid two">
+  <div class="panel">
+    <h2>Due Notifications</h2>
+    {% for reminder in notifications %}
+      <div class="line-item">
+        <strong>{{ reminder.title }}</strong>
+        <span>{{ reminder.channel }} for {{ reminder.agent|default:"Unassigned" }} · {{ reminder.due_date }}</span>
+      </div>
+    {% empty %}
+      <p class="subtle">No due notifications.</p>
+    {% endfor %}
+  </div>
+  <div class="panel">
+    <h2>Recent Leads</h2>
+    {% for lead in recent_leads %}
+      <div class="line-item">
+        <strong>{{ lead.name }}</strong>
+        <span>{{ lead.status }} · {{ lead.assigned_agent|default:"Unassigned" }}</span>
+      </div>
+    {% empty %}
+      <p class="subtle">No leads yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Assignment Coverage</h2>
+  <div class="coverage">
+    <span>Lead Management</span>
+    <span>Property CRUD</span>
+    <span>Client Profiles</span>
+    <span>Deal Pipeline</span>
+    <span>Follow-up Scheduler</span>
+    <span>Agent Roles</span>
+    <span>Reports/Exports</span>
+    <span>API/Webhooks</span>
+  </div>
+</section>
+{% endblock %}

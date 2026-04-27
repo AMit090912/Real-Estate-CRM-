@@ -1,0 +1,53 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Real Estate CRM{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'crm/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <a class="brand" href="{% url 'dashboard' %}">Estate CRM By Amit</a>
+    </div>
+    <form class="role-form" method="post" action="{% url 'set_role' %}">
+      {% csrf_token %}
+      <label>Role</label>
+      <select name="role" onchange="this.form.submit()">
+        <option value="Admin" {% if current_role == 'Admin' %}selected{% endif %}>Admin</option>
+        <option value="Manager" {% if current_role == 'Manager' %}selected{% endif %}>Manager</option>
+        <option value="Agent" {% if current_role == 'Agent' %}selected{% endif %}>Agent</option>
+      </select>
+    </form>
+  </header>
+
+  <div class="layout">
+    <nav class="side-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'lead_list' %}">Leads</a>
+      <a href="{% url 'property_list' %}">Properties</a>
+      <a href="{% url 'client_list' %}">Clients</a>
+      <a href="{% url 'deal_list' %}">Deals</a>
+      <a href="{% url 'communications' %}">Follow-ups</a>
+      <a href="{% url 'agent_list' %}">Agents</a>
+      <a href="{% url 'reports' %}">Reports</a>
+      <a href="{% url 'integrations' %}">Integrations</a>
+      <a href="/admin/">Django Admin</a>
+    </nav>
+
+    <main class="content">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends "crm/base.html" %}
+{% block title %}Integrations - Estate CRM{% endblock %}
+{% block content %}
+<div class="page-title">
+  <div><h1>Integrations</h1><p>Website capture form, REST endpoint and webhook endpoint.</p></div>
+</div>
+
+<section class="grid two">
+  <div class="panel">
+    <h2>Website Lead Capture</h2>
+    <form method="post" action="{% url 'website_capture' %}" class="mini-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="button primary" type="submit">Capture Lead</button>
+    </form>
+  </div>
+  <div class="panel">
+    <h2>API Details</h2>
+    <p><strong>Lead capture:</strong> POST /api/leads/capture/</p>
+    <p><strong>Webhook:</strong> POST /api/webhooks/lead/</p>
+    <p><strong>Reports:</strong> /reports/ and export buttons</p>
+    <p class="subtle">SMS, email and portal integrations are mocked as endpoints and activity records for this assignment version.</p>
+  </div>
+</section>
+{% endblock %}

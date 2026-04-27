@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+
+# Django/local runtime
+db.sqlite3
+media/
+staticfiles/
+*.log
+
+# Local vendored dependencies from this Codex environment
+vendor/
+django_vendor/
+
+# Old/generated local prototype artifacts
+node_modules/
+data/
+public/
+server.js
+package.json
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
