@@ -1,4 +1,4 @@
-# Real Estate CRM Module - Django Version
+# Real Estate CRM Module
 
 
 Open:
